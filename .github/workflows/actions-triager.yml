@@ -1,0 +1,63 @@
+name: Actions triager
+on:
+  workflow_dispatch:
+  schedule:
+    # Mondays at 9AM UTC (2AM PT, 10AM BST)
+    - cron:  '0 9 * * 2'
+jobs:
+  triager:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Count how many of the most recent 100 items have a status of "triage"
+        run: |
+          NUMBER_TO_TRIAGE=$(gh api graphql -f query='
+            query{
+            organization(login: "github") {
+              projectV2(number: 4412) {
+                items(last:100) {
+                  nodes {
+                    fieldValues(first: 100) {
+                      nodes {
+                        ... on ProjectV2ItemFieldSingleSelectValue {
+                          name
+                          field {
+                            ... on ProjectV2FieldCommon {
+                              name
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }' | jq '[.data.organization.projectV2.items.nodes[] | select(.fieldValues.nodes[] | select(.name == "Needs triage" and .field.name == "Status"))] | length')
+
+          echo 'NUMBER_TO_TRIAGE='$NUMBER_TO_TRIAGE >> $GITHUB_ENV
+        env:
+          GITHUB_TOKEN: ${{secrets.DOCS_BOT_FR}}
+
+      - name: Echo count
+        run: echo $NUMBER_TO_TRIAGE
+
+      - name: Checkout contents
+        if: ${{ env.NUMBER_TO_TRIAGE > 0 }}
+        uses: actions/checkout@v3
+
+      - name: Prepare slack string
+        if: ${{ env.NUMBER_TO_TRIAGE > 0 }}
+        run: |-
+          echo "SLACK_STRING<<EOF" >> $GITHUB_ENV
+          echo "There are currently $NUMBER_TO_TRIAGE items <https://github.com/orgs/github/projects/4412/views/9|awaiting triage>. Emoji react to this message if you plan to triage before the team sync this week, or if you already have." >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: Post triage reminder to Slack
+        if: ${{ env.NUMBER_TO_TRIAGE > 0 }}
+        uses: someimportantcompany/github-actions-slack-message@f8d28715e7b8a4717047d23f48c39827cacad340
+        with:
+          channel: C055XU07HP0
+          # In order for this bot token to work, @Web Engineering Bot must be in the channel
+          bot-token: ${{ secrets.SLACK_DOCS_BOT_TOKEN }}
+          color: good
+          text: "${{ env.SLACK_STRING }}"
