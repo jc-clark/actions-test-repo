@@ -37,6 +37,8 @@ jobs:
           echo 'NUMBER_TO_TRIAGE='$NUMBER_TO_TRIAGE >> $GITHUB_ENV
         env:
           GITHUB_TOKEN: ${{secrets.DOCS_BOT_FR}}
+        env:
+          GH_TOKEN: ${{ github.token }}
 
       - name: Echo count
         run: echo $NUMBER_TO_TRIAGE
