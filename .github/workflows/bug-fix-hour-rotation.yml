@@ -1,0 +1,52 @@
+name: 'Enterprise rhythm: bug fix hour'
+
+# **What it does**: Creates an issue to track each week's bug fix hour for the Enterprise focus area.
+# **Why we have it**: To manage the bug fix rotation for the Enterprise focus area.
+# **Who does it impact**: The Enterprise focus team.
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: 0 17 * * 3  # Every Wednesday at 16:00 UTC, 9:00AM PST. Aligns with weekly Actions team sync. 
+
+jobs:
+  create-issue:
+    name: Create issue for Actions bug fix hour
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Store dates
+        run: |
+          echo "TARGET_WEEK=$(date -d next-monday '+%B %d, %Y')" >> $GITHUB_ENV
+          echo "TARGET_DATE=$(date -d 'next-monday + 8 days' '+%Y-%m-%d')" >> $GITHUB_ENV
+
+      - name: Create issue
+        uses: imjohnbo/issue-bot@v3
+        with:
+          title: Actions bug fix hour for week of ${{ env.TARGET_WEEK }}
+          assignees: jc-clark
+          rotate-assignees: true
+          labels: Actions, bug fix hour rhythm, skip FR board
+          linked-comments: true
+          linked-comments-previous-issue-text: |
+            ➡️ [Next issue in series](https://github.com/github/docs-content/issues/{{ newIssueNumber }}) 🤖
+          linked-comments-new-issue-text: |
+            ⬅️ [Previous issue in series](https://github.com/github/docs-content/issues/{{ previousIssueNumber }}) 🤖            
+          body: |
+            <!-- gh project="2" add-item -->
+            <!-- gh project="2" update-field="Type" value="Rhythm" -->
+            <!-- gh project="2" update-field="Pillar" value="Cross-team relationships" -->
+            <!-- gh project="2" update-field="Target date" value="${{ env.TARGET_DATE }}" -->
+
+            ## Instructions for triage
+            
+            - [ ] With the [Docs Content team calendar](https://calendar.google.com/calendar/embed?src=c_b6479d3fbfa96d03890f6523d7f7106553dc27573d1fbaa9d695ae903cb98bfd%40group.calendar.google.com), check whether the assignee is out of office for the week of ${{ env.TARGET_WEEK }}. 
+               - If the assignee isn't available, assign this issue to the [next available rotation member](https://github.com/github/docs-content/blob/main/.github/workflows/enterprise-rhythm-bug-fix-hour.yml#L28). 
+               - After you assign the issue to another rotation member, the rotation will continue from that member.
+            - [ ] In the Enterprise focus area's project, adjust the "Cycle" field for this issue to the cycle containing the week of ${{ env.TARGET_WEEK }}.
+
+            ## Instructions for assignee
+
+            - [ ] If you're available during the specified week, reserve one hour on your calendar for fixing bugs. For more information, see [Completing a bug fix hour](https://github.com/github/docs-content/blob/main/focus-areas/enterprise/processes/bug-fixes.md#completing-a-bug-fix-hour).
+            - [ ] If you're unavailable, coordinate a trade with another focus team member here or on Slack, then assign this issue to the writer who will complete the bug fix hour.
