@@ -1,0 +1,1 @@
+Repo for the optimized images. Automatically gets images from the `/images` directiory using the `image-optimizer.yml` workflow.
