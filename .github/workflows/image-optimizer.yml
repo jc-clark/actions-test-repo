@@ -3,7 +3,7 @@ name: Image Optimizer
 on:
   push:
     paths:
-      - 'images/**'  # Path to your artwork images
+      - 'images/**'  # Path to images
 
 jobs:
   optimize-images:
