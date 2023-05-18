@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Install imagemin
-        run: npm install imagemin
+        run: npm install -g imagemin
 
       - name: Checkout repository
         uses: actions/checkout@v3
