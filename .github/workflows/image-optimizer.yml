@@ -10,10 +10,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-        - name: Install imagemin
+      - name: Install imagemin
         run: npm install imagemin
 
-        - name: Checkout repository
+      - name: Checkout repository
         uses: actions/checkout@v3
 
       - name: Install Node.js
