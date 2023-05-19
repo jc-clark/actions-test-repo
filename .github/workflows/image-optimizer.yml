@@ -11,6 +11,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: NPM CI
+        run: npm ci
+
       - name: Install imagemin
         run: npm install -g imagemin
 
