@@ -13,6 +13,7 @@ jobs:
     steps:
       - name: npm install
         run: npm install
+        working-directory: actions-test-repo/package.json
 
       - name: Install imagemin
         run: npm install -g imagemin
