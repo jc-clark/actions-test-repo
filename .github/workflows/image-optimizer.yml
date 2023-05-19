@@ -1,6 +1,7 @@
 name: Image Optimizer
 
 on:
+  workflow_dispatch:
   push:
     paths:
       - 'images/**'  # Path to images
