@@ -1,0 +1,18 @@
+name: "Example Workflow to show ordinal count"
+on: workflow_dispatch
+jobs:
+  ordinal_comparison:
+    runs-on: ubuntu-latest
+    steps:
+      - id: a
+        run: echo "result=5" >> "${GITHUB_OUTPUT}"
+      - id: b
+        run: echo "result=10" >> "${GITHUB_OUTPUT}"
+      - if: steps.a.outputs.result > steps.b.outputs.result
+        run: echo "${{ steps.a.outputs.result }} is greater than ${{ steps.b.outputs.result }} (as strings)"
+      - if: steps.a.outputs.result < steps.b.outputs.result
+        run: echo "${{ steps.a.outputs.result }} is less than ${{ steps.b.outputs.result }} (as strings)"
+      - if: fromJSON(steps.a.outputs.result) > fromJSON(steps.b.outputs.result)
+        run: echo "${{ steps.a.outputs.result }} is greater than ${{ steps.b.outputs.result }} (as numbers)"
+      - if: fromJSON(steps.a.outputs.result) < fromJSON(steps.b.outputs.result)
+        run: echo "${{ steps.a.outputs.result }} is less than ${{ steps.b.outputs.result }} (as numbers)"
