@@ -1,4 +1,4 @@
-name: ASCII Hex Test
+name: Print JSON Result
 
 on:
   workflow_dispatch:
@@ -17,5 +17,10 @@ jobs:
           node-version: '14'
 
       - name: Run JavaScript code
+        id: print
         run: |
-          node -e "console.log(fromJSON('a'))"
+          echo "::set-output name=result::$(node -e "console.log(fromJSON('a'))")"
+
+      - name: Print Result
+        run: |
+          echo "The result is ${{ steps.print.outputs.result }}"
