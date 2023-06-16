@@ -4,21 +4,18 @@ on:
   workflow_dispatch:
 
 jobs:
-  test:
+  print-result:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-    - name: Run test
-      run: |
-        echo "Running ASCII Hex test..."
-        actual_hex=$(printf '%x' "'a'")
-        expected_hex="61"
-        if [ "$actual_hex" = "$expected_hex" ]; then
-          echo "Test passed! The ASCII hex representation for 'a' is 61."
-        else
-          echo "Test failed! The ASCII hex representation for 'a' is not 61."
-          exit 1
-        fi
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Run JavaScript code
+        run: |
+          node -e "console.log(fromJSON('a'))"
