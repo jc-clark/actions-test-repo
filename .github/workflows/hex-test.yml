@@ -8,9 +8,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
@@ -19,7 +16,7 @@ jobs:
       - name: Run JavaScript code
         id: print
         run: |
-          echo "::set-output name=result::$(node -e "console.log(fromJSON('a'))")"
+          echo "result=$(node -e 'console.log(fromJSON(\"a\"))')" >> $GITHUB_ENV
 
       - name: Print Result
         run: |
