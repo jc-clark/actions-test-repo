@@ -17,10 +17,11 @@ on:
         required: true
 
 
-jobs:
+jobs: ex_job_name
   build:
     runs-on: ubuntu-latest
 
     steps:
       - name: Print environment
         run: echo "Deploying to ${{ github.event.inputs.environment }}"
+        run: echo "Is this the name or ID of this job: ${{ github.job }}"
