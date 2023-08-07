@@ -9,6 +9,7 @@ env:
 jobs:
   greeting_job:
     runs-on: ubuntu-latest
+    if: failure()
     env:
       Greeting: Hello
     steps:
