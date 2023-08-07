@@ -19,3 +19,5 @@ jobs:
           First_Name: Mona
       - name: "Say Hello Someone it's Monday"
         run: echo "$Greeting $First_Name. Today is $DAY_OF_WEEK!"
+      - name: "this is the name of the step"
+        run: echo "${{ github.job }} is the name of the job. Or maybe it's the ID."
