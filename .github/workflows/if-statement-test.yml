@@ -1,7 +1,9 @@
-name: If statement test
+name: test-expression
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
 
 jobs:
     test:
@@ -10,6 +12,6 @@ jobs:
         - run: echo 'Hello, world!'
     statement-if:
         runs-on: ubuntu-latest
-        if: github.event_name == 'workflow_dispatch' && !startsWith(github.ref, 'refs/heads/')
+        if: github.event_name == 'push' && !startsWith(github.ref, 'refs/heads/')
         steps:
         - run: echo 'Summer!'
