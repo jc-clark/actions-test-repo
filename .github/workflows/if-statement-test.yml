@@ -1,0 +1,15 @@
+name: If statement test
+
+on:
+  workflow_dispatch:
+
+jobs:
+    test:
+        runs-on: ubuntu-latest
+        steps:
+        - run: echo 'Hello, world!'
+    statement-if:
+        runs-on: ubuntu-latest
+        if: github.event_name == 'push' && !startsWith(github.ref, 'refs/heads/')
+        steps:
+        - run: echo 'Summer!'
