@@ -1,0 +1,17 @@
+name: If statement test 2
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+    test:
+        runs-on: ubuntu-latest
+        steps:
+        - run: echo 'Hello, world!'
+    statement-if:
+        runs-on: ubuntu-latest
+        if: !startsWith(github.ref, 'refs/heads/') && github.event_name == 'push'
+        steps:
+        - run: echo 'Summer!'
