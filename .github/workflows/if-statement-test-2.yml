@@ -12,6 +12,6 @@ jobs:
         - run: echo 'Hello, world!'
     statement-if:
         runs-on: ubuntu-latest
-        if: !startsWith(github.ref, 'refs/heads/') && github.event_name == 'push'
+        if: !startsWith(github.ref, 'refs/heads/test') && github.event_name == 'push'
         steps:
         - run: echo 'Summer!'
