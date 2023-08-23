@@ -10,6 +10,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
         - run: echo 'Hello, world!'
+        - run: echo 'Hello, warld!'
     statement-if:
         runs-on: ubuntu-latest
         if: ${{ !startsWith(github.ref, 'refs/heads/test') && github.event_name == 'push' }}
