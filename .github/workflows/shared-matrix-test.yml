@@ -1,0 +1,55 @@
+name: shared matrix
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  define-matrix:
+    runs-on: ubuntu-latest
+
+    outputs:
+      colors: ${{ steps.colors.outputs.colors }}
+
+    steps:
+      - name: Define Colors
+        id: colors
+        run: |
+          echo 'colors=["red", "green", "blue"]' >> "$GITHUB_OUTPUT"
+
+  produce-artifacts:
+    runs-on: ubuntu-latest
+    needs: define-matrix
+    strategy:
+      matrix:
+        color: ${{ fromJSON(needs.define-matrix.outputs.colors) }}
+
+    steps:
+      - name: Define Color
+        env:
+          color: ${{ matrix.color }}
+        run: |
+          echo "$color" > color
+      - name: Produce Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.color }}
+          path: color
+
+  consume-artifacts:
+    runs-on: ubuntu-latest
+    needs:
+    - define-matrix
+    - produce-artifacts
+    strategy:
+      matrix:
+        color: ${{ fromJSON(needs.define-matrix.outputs.colors) }}
+
+    steps:
+    - name: Retrieve Artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: ${{ matrix.color }}
+      
+    - name: Report Color
+      run: |
+        cat color
