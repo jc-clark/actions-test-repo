@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Test stale with assignee template
-        uses: actions/stale@9971854
+        uses: actions/stale@997185467fa4f803885201cee163a9f38240193d
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           days-before-stale: 0
