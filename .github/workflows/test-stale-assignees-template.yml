@@ -1,0 +1,21 @@
+name: Test Stale Assignee Template
+
+on:
+  workflow_dispatch:
+
+permissions:
+  issues: write
+
+jobs:
+  test-stale:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test stale with assignee template
+        uses: actions/stale@9971854
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          days-before-stale: 0
+          days-before-close: -1
+          stale-issue-message: 'Hi {{assignee}}! This is a test of the assignee template.'
+          stale-issue-label: 'stale-test'
+          operations-per-run: 30
